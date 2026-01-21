@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniDetect AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(20, 20, 20, 0.6);
+            --border: rgba(255, 255, 255, 0.1);
+            --neon: #6366f1;
+            --real-color: #10b981;
+            --fake-color: #f43f5e;
+            --warn-color: #f59e0b;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Jost', sans-serif;
+            background: #000;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            width: 80%;
+            max-width: 1100px;
+            height: 600px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Bento Layout */
+        .main-upload { grid-row: span 2; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .info-panel { grid-column: 2; display: flex; flex-direction: column; justify-content: space-between; }
+        .result-panel { grid-column: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+
+        h1 { font-size: 3rem; margin: 0; line-height: 1; background: linear-gradient(to right, #fff, var(--neon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .upload-box {
+            width: 100%; height: 100%;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+        .upload-box:hover { background: rgba(255,255,255,0.05); border-color: var(--neon); }
+        input[type="file"] { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
+        .scan-btn {
+            margin-top: 20px;
+            padding: 15px 40px;
+            background: var(--neon);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            font-weight: 600;
+        }
+        .scan-btn:hover { box-shadow: 0 0 20px var(--neon); }
+
+        /* Results */
+        .percentage-big { font-size: 4rem; font-weight: 300; line-height: 1; }
+        .label-badge { 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            font-size: 0.9rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin-top: 10px;
+            display: inline-block;
+        }
+        
+        .real-style { color: var(--real-color); border: 1px solid var(--real-color); background: rgba(16, 185, 129, 0.1); }
+        .fake-style { color: var(--fake-color); border: 1px solid var(--fake-color); background: rgba(244, 63, 94, 0.1); }
+        .uncertain-style { color: var(--warn-color); border: 1px solid var(--warn-color); }
+
+        .tags { display: flex; gap: 10px; margin-top: 10px; opacity: 0.6; font-size: 0.8rem; }
+        .tag { background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 5px; }
+
+        /* Loader */
+        .loader {
+            width: 100%; height: 4px;
+            background: rgba(255,255,255,0.1);
+            position: absolute; bottom: 0; left: 0;
+            display: none;
+            overflow: hidden;
+        }
+        .loader::after {
+            content: '';
+            position: absolute; left: -50%; width: 50%; height: 100%;
+            background: var(--neon);
+            animation: load 1s infinite linear;
+        }
+        @keyframes load { from { left: -50%; } to { left: 100%; } }
+
+    </style>
+</head>
+<body>
+
+    <div class="grid-container">
+        
+        <div class="card main-upload">
+            <form method="post" enctype="multipart/form-data" id="form" style="width:90%; height:80%;">
+                <div class="upload-box" id="dropArea">
+                    <span style="font-size: 4rem; margin-bottom: 20px;">🖼️</span>
+                    <h2 id="filename">Drop Image or Video</h2>
+                    <p style="opacity: 0.5;">Supports: Nature, Animals, Humans, Art</p>
+                    <input type="file" name="file" id="fileInput" required>
+                </div>
+                <button class="scan-btn" id="btn">Analyze Universal</button>
+                <div class="loader" id="loader"></div>
+            </form>
+        </div>
+
+        <div class="card info-panel">
+            <div>
+                <h1>Omni<br>Detect</h1>
+                <p style="opacity: 0.7;">Universal Generative Adversarial Network & ViT Scanner.</p>
+            </div>
+            <div class="tags">
+                <span class="tag">Nature</span>
+                <span class="tag">Portrait</span>
+                <span class="tag">Anime</span>
+                <span class="tag">CGI</span>
+            </div>
+        </div>
+
+        <div class="card result-panel">
+            {% if label %}
+                <div class="percentage-big">{{ percent }}%</div>
+                <div style="opacity: 0.5; font-size: 0.8rem;">AI PROBABILITY</div>
+                
+                <div class="label-badge 
+                    {% if category == 'real' %}real-style{% elif category == 'artificial' %}fake-style{% else %}uncertain-style{% endif %}">
+                    {{ label }}
+                </div>
+            {% else %}
+                <div style="opacity: 0.3; text-align: center;">
+                    <h3>Waiting...</h3>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('fileInput').onchange = function(e) {
+            document.getElementById('filename').innerText = e.target.files[0].name;
+            document.getElementById('dropArea').style.borderColor = '#6366f1';
+        };
+
+        document.getElementById('form').onsubmit = function() {
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('btn').style.opacity = '0.5';
+            document.getElementById('btn').innerText = 'Scanning pixels...';
+        };
+    </script>
+</body>
+</html>
