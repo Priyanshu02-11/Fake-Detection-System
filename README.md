@@ -1,10 +1,10 @@
 # Fake Detection System
 
-A sophisticated deepfake detection system built with Python, utilizing advanced machine learning models to identify manipulated media content. This project provides both a web interface and programmatic API for detecting fake images and videos.
+A sophisticated deepfake detection system built with Python, utilizing advanced machine learning models to identify manipulated media content. This project provides both a web interface and programmatic API for detecting fake images.
 
 ## 🚀 Features
 
-- **Multi-Modal Detection**: Supports detection of fake images and videos
+- **Multi-Modal Detection**: Supports detection of fake images!
 - **Advanced ML Models**: Employs state-of-the-art deep learning architectures including Vision Transformers (ViT) and custom universal models
 - **Web Interface**: User-friendly web application built with Flask
 - **REST API**: Programmatic access for integration with other systems
@@ -64,7 +64,7 @@ A sophisticated deepfake detection system built with Python, utilizing advanced 
    Navigate to `http://localhost:5000`
 
 3. **Upload and analyze**
-   - Upload images or videos through the web interface
+   - Upload images through the web interface
    - View detection results with confidence scores
    - Download analysis reports
 
@@ -114,7 +114,7 @@ The system employs multiple detection strategies:
 
 1. **Feature Extraction**: Uses pre-trained CNNs and ViT models to extract features from input media
 2. **Anomaly Detection**: Identifies unnatural patterns in facial expressions and movements
-3. **Temporal Analysis**: For videos, analyzes frame consistency over time
+3. **Temporal Analysis**: For images, analyzes frame consistency over time
 4. **Ensemble Learning**: Combines multiple model predictions for improved accuracy
 
 ## 📊 Model Performance
@@ -151,7 +151,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Special thanks to researchers in deepfake detection for their groundbreaking work
 - Inspired by various academic papers on media forensics
 
-## 🔄 Future Enhancements
+## 🔄 Future Enhancements & Plans
 
 - [ ] Video deepfake detection
 - [ ] Real-time streaming analysis
