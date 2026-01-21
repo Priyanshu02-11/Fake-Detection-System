@@ -151,12 +151,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Special thanks to researchers in deepfake detection for their groundbreaking work
 - Inspired by various academic papers on media forensics
 
-## 📞 Contact
-
-**Priyanshu**
-- GitHub: [@Priyanshu02-11](https://github.com/Priyanshu02-11)
-- Project Link: [https://github.com/Priyanshu02-11/Fake-Detection-System](https://github.com/Priyanshu02-11/Fake-Detection-System)
-
 ## 🔄 Future Enhancements
 
 - [ ] Video deepfake detection
